@@ -7,16 +7,16 @@ Plugin onewired
 Purpose
 =======
 
-Another Domogik (no xPL) plugin for 1-wire bus.
+Another Domogik (**no xPL**) plugin for 1-wire bus.
 
-* This is a no xPL plugin, sensor value are update by 0mq messages
+* This is a no xPL plugin, sensor value are update by **0mq messages**
 * The plugin read only the 1-wire sensor created devices
 * There are one sensor for one device
 * Except for 1-wire counter, there is 2 sensors: one sensor counter et one incremental counter sensor
-* The plugin can read all properties of 1-wire chip like "B1-R1-A/pressure" for a DS2438 chip.
+* The plugin can read all properties of 1-wire chip like **"B1-R1-A/pressure"** for a **DS2438** chip.
 * The plugin only support a few datatype like Temperature, Humidity, Pressure 
-* But there is generic Voltage datatype for 1-wire CAN like DS2438 or DS2450
-* The plugin can't use Output sensor device like DS2405/6/7/8/13 for now, only the Input works
+* But there is generic Voltage datatype for 1-wire CAN like **DS2438** or **DS2450**
+* The plugin can't use Output sensor device like **DS2405/6/7/8/13** for now, only the Input works
 
 
 .. warning::	
