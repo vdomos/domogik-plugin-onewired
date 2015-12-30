@@ -4,7 +4,7 @@
 
 Another Domogik (no xPL) plugin for 1-wire bus
 
-Plugin in works, See the develop branch
+Plugin in works, See the **develop branch**
 
 
 Domogik is an open source home automation solution.
