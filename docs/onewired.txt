@@ -1,0 +1,12 @@
+Plugin onewired
+===================
+
+Purpose
+=======
+
+Another Domogik (**no xPL**) plugin for 1-wire bus.
+
+.. warning::	
+	The plugin and the documentation are still in development.
+	See develop branch documentation
+
