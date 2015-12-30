@@ -1,0 +1,15 @@
+
+
+
+(root@localhost) [domogik]> select *  from core_device where client_id='plugin-onewired.hermes' ;
++----+---------------------+-------------+----------------------------+-----------------------------------+------------------------+----------------+
+| id | name                | description | reference                  | device_type_id                    | client_id              | client_version |
++----+---------------------+-------------+----------------------------+-----------------------------------+------------------------+----------------+
+| 79 | Porte garage        |             | 05.3A9233000000/sensed     | onewire.pio_input                 | plugin-onewired.hermes | 0.1            |
+| 80 | Compteur Anemometre |             | 1D.61BF0D000000/counters.A | onewire.counter_count             | plugin-onewired.hermes | 0.1            |
+| 82 | Girouette           |             | 26.3442E7000000/VAD        | onewire.batterymonitor_voltage    | plugin-onewired.hermes | 0.1            |
+| 83 | Temp Ext Ow         |             | 28.7079D0040000            | onewire.thermometer_temp          | plugin-onewired.hermes | 0.1            |
+| 84 | Temp chaudiere      |             | 28.5C1FD0040000            | onewire.thermometer_temp          | plugin-onewired.hermes | 0.1            |
+| 85 | Temp garage         |             | 28.FC1D80010000            | onewire.thermometer_temp          | plugin-onewired.hermes | 0.1            |
+| 86 | Luminosity Sous-sol |             | 26.D050E7000000/vis        | onewire.batterymonitor_luminosity | plugin-onewired.hermes | 0.1            |
++----+---------------------+-------------+----------------------------+-----------------------------------+------------------------+----------------+

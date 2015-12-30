@@ -1,0 +1,77 @@
+.. _index:
+
+===================
+Plugin onewired
+===================
+
+Purpose
+=======
+
+Another Domogik (no xPL) plugin for 1-wire bus.
+
+* This is a no xPL plugin, sensor value are update by 0mq messages
+* The plugin read only the 1-wire sensor created devices
+* There are one sensor for one device
+* Except for 1-wire counter, there is 2 sensors: one sensor counter et one incremental counter sensor
+* The plugin can read all properties of 1-wire chip like "B1-R1-A/pressure" for a DS2438 chip.
+* The plugin only support a few datatype like Temperature, Humidity, Pressure 
+* But there is generic Voltage datatype for 1-wire CAN like DS2438 or DS2450
+* The plugin can't use Output sensor device like DS2405/6/7/8/13 for now, only the Input works
+
+
+.. warning::	
+	The plugin and the documentation are still in development
+
+	
+	
+Here are some screenshots to view usage
+---------------------------------------
+
+
+.. image:: Domogik_Plugin_Onewired_1.png
+
+.. image:: Domogik_Plugin_Onewired_2.png
+
+.. image:: Domogik_Plugin_Onewired_3.png
+
+.. image:: Domogik_Plugin_Onewired_4.png
+
+.. image:: Domogik_Plugin_Onewired_5.png
+
+
+
+
+
+Dependencies
+============
+
+Plugin configuration
+====================
+
+Create the devices
+==================
+
+Device parameters configuration
+-------------------------------
+
+X parameters are needed for a domogik device creation ...
+
+
+===================== =========================== ======================================================================
+Key                   Type                        Description
+===================== =========================== ======================================================================
+key1                  datatype                    ...
+--------------------- --------------------------- ----------------------------------------------------------------------
+key2                  datatype                    ...
+===================== =========================== ======================================================================
+
+
+Start the plugin
+================
+
+You can now start the plugin (start button) and use the created devices.
+
+Set up your widgets on the user interface
+=========================================
+
+You can now place the widgets of your devices features on the user interface.
