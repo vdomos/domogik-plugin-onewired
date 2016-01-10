@@ -64,7 +64,7 @@ class OneWireNetwork:
         default 'u' for USB
         """
         self.log = log
-        self.log.info("==> OWFS version : %s" % ow.__version__)
+        self.log.info(u"==> OWFS version : %s" % ow.__version__)
         try:
             ow.init(dev)
             self._cache = cache
@@ -75,9 +75,9 @@ class OneWireNetwork:
 
             senseurslist = ow.Sensor("/").sensorList()    # [Sensor("/10.CF8313020800"), Sensor("/28.A05FD7010000"), Sensor("/26.99E4F1000000"), Sensor("/81.E1BC2C000000")]
             for senseur in senseurslist:
-                self.log.info("==> Senseurs trouvés:  %s   %s" % (senseur.type, senseur.family + '.' + senseur.id))
+                self.log.info(u"==> Senseurs trouvés:  %s   %s" % (senseur.type, senseur.family + '.' + senseur.id))
         except:
-            raise OneWireException("### Access to onewire device is not possible:  %s" % traceback.format_exc())
+            raise OneWireException(u"### Access to onewire device is not possible:  %s" % traceback.format_exc())
 
         # self.sensortype2datatype = {"temperature" : "temp", "temperature9" : "temp", "humidity" : "humidity", "VAD" : "voltage", "vis" : "voltage", "B1-R1-A/pressure": "pressure" }
 
@@ -88,7 +88,7 @@ class OneWireNetwork:
         """
         try:
             sensor = self._root + saddress + "/" + sprop
-            self.log.info("==> Reading sensor '%s'" % sensor)
+            self.log.info(u"==> Reading sensor '%s'" % sensor)
             value = ow.owfs_get(str(sensor)).strip()                    # Ex.: ow.owfs_get('/26.D050E7000000/B1-R1-A/pressure')
             return value
         except AttributeError:
@@ -125,5 +125,5 @@ class OnewireRead:
             if "temperature" in self.sensor_properties:
                 val = "%.1f" % float(val)
             self.send(self.device_id, self.device_name, val)
-            self.log.debug("=> '{0}' : wait for {1} seconds".format(self.device_name, self.interval))
+            self.log.debug(u"=> '{0}' : wait for {1} seconds".format(self.device_name, self.interval))
             self.stop.wait(self.interval)

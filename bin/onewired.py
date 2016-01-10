@@ -134,7 +134,7 @@ class OnewireNetManager(Plugin):
         data = {}
         for sensor in self.sensors[device_id]:                  # "for" nécessaire pour les 2 sensors counter : '1-wire counter diff' et '1-wire counter'
             data[self.sensors[device_id][sensor]] = value       # sensor = sensor name in info.json file
-        self.log.debug("==> Send 0MQ message '%s' for device id %s (%s)" % (format(data), device_id, device_name))        # {u'id': u'value'}
+        self.log.debug(u"==> Send 0MQ message '%s' for device id %s (%s)" % (format(data), device_id, device_name))        # {u'id': u'value'}
 
         try:
             self._pub.send_event('client.sensor', data)
@@ -155,7 +155,7 @@ class OnewireNetManager(Plugin):
             data = msg.get_data()
             self.log.info(u"==> Received 0MQ messages data: %s" % format(data))
 
-            self.log.info("Reply to command 0MQ")
+            self.log.info(u"Reply to command 0MQ")
             reply_msg = MQMessage()
             reply_msg.set_action('client.cmd.result')
             reply_msg.add_data('status', status)
