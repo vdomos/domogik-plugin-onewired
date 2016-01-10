@@ -102,25 +102,28 @@ class OnewireNetManager(Plugin):
                 self.log.info(u"==> Sensor list of device '{0}': '{1}'".format(device_id, self.sensors[device_id]))
                 # Affiche: INFO ==> Sensor list of device id:5: '{u'1-wire counter diff': 38, u'1-wire counter': 37}'
 
-                self.log.info(u"==> Launch thread for '%s' device !" % device_name)
-                thr_name = "dev_{0}".format(a_device['id'])
-                threads[thr_name] = threading.Thread(None,
-                                                        OnewireRead,
-                                                        thr_name,
-                                                        (self.log,
-                                                            onewire,
-                                                            device_id,
-                                                            device_name,
-                                                            sensor_address,
-                                                            sensor_properties,
-                                                            sensor_interval,
-                                                            self.send_data,
-                                                            self.get_stop()),
-                                                    {})
-                threads[thr_name].start()
-                self.register_thread(threads[thr_name])
-                self.log.info(u"==> Wait some time before running the next scheduled threads ...")
-                time.sleep(5)        # Wait some time to not start the threads with the same interval et the same time.
+                if sensor_interval > 0:
+                    self.log.info(u"==> Launch thread for '%s' device !" % device_name)
+                    thr_name = "dev_{0}".format(a_device['id'])
+                    threads[thr_name] = threading.Thread(None,
+                                                            OnewireRead,
+                                                            thr_name,
+                                                            (self.log,
+                                                                onewire,
+                                                                device_id,
+                                                                device_name,
+                                                                sensor_address,
+                                                                sensor_properties,
+                                                                sensor_interval,
+                                                                self.send_data,
+                                                                self.get_stop()),
+                                                        {})
+                    threads[thr_name].start()
+                    self.register_thread(threads[thr_name])
+                    self.log.info(u"==> Wait some time before running the next scheduled threads ...")
+                    time.sleep(5)        # Wait some time to not start the threads with the same interval et the same time.
+                else:
+                    self.log.info(u"==> Onewire sensor thread '%s' for '%s' device is DISABLED (interval < 0) !" % (thr_name, device_name))
 
             else:
                 pass        # TODO: For ouput => listener !

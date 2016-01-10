@@ -91,6 +91,8 @@ class OneWireNetwork:
             self.log.info(u"==> Reading sensor '%s'" % sensor)
             value = ow.owfs_get(str(sensor)).strip()                    # Ex.: ow.owfs_get('/26.D050E7000000/B1-R1-A/pressure')
             return value
+        except ow.exUnknownSensor:
+            return "failed"
         except AttributeError:
             raise OneWireException("### Error while reading value: '%s'" % traceback.format_exc())
 
@@ -122,8 +124,12 @@ class OnewireRead:
         """
         while not self.stop.isSet():
             val = self.onewire.readSensor(self.sensor_address, self.sensor_properties)
-            if "temperature" in self.sensor_properties:
-                val = "%.1f" % float(val)
-            self.send(self.device_id, self.device_name, val)
+            if val != "failed":
+                if "temperature" in self.sensor_properties:
+                    val = "%.1f" % float(val)
+                self.send(self.device_id, self.device_name, val)
+            else:
+                self.log.error(u"### Sensor '%s' for device '%s' not found, Attempting to read it in the next interval" % (self.sensor_address, self.device_name))
             self.log.debug(u"=> '{0}' : wait for {1} seconds".format(self.device_name, self.interval))
             self.stop.wait(self.interval)
+
