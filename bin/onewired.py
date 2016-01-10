@@ -44,6 +44,7 @@ from domogik_packages.plugin_onewired.lib.onewired import OneWireNetwork
 from domogik_packages.plugin_onewired.lib.onewired import OnewireRead
 
 import threading
+import time
 
 
 class OnewireNetManager(Plugin):
@@ -118,6 +119,8 @@ class OnewireNetManager(Plugin):
                                                     {})
                 threads[thr_name].start()
                 self.register_thread(threads[thr_name])
+                self.log.info(u"==> Wait some time before running the next scheduled threads ...")
+                time.sleep(5)        # Wait some time to not start the threads with the same interval et the same time.
 
             else:
                 pass        # TODO: For ouput => listener !
