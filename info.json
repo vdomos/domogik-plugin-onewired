@@ -490,7 +490,7 @@
             }
         ],
 		"description": "Plugin for 1-wire bus",
-		"domogik_min_version": "0.4.0", 
+		"domogik_min_version": "0.5.0", 
 		"name": "onewired", 
 		"type": "plugin", 
 		"version": "0.1"
