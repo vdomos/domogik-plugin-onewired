@@ -82,19 +82,25 @@ class OneWireNetwork:
         # self.sensortype2datatype = {"temperature" : "temp", "temperature9" : "temp", "humidity" : "humidity", "VAD" : "voltage", "vis" : "voltage", "B1-R1-A/pressure": "pressure" }
 
 
+
     def readSensor(self, saddress, sprop):
         """
-        ow.Sensor don't work withe sensor directory be replace by ow.owfs_get
+        ow.Sensor don't work with sensor directory be replace by ow.owfs_get
         """
         try:
             sensor = self._root + saddress + "/" + sprop
             self.log.info(u"==> Reading sensor '%s'" % sensor)
-            value = ow.owfs_get(str(sensor)).strip()                    # Ex.: ow.owfs_get('/26.D050E7000000/B1-R1-A/pressure')
+            value = ow.owfs_get(str(sensor)).strip()                # Ex.: ow.owfs_get('/26.D050E7000000/B1-R1-A/pressure')
+            if ("temperature" in sprop) and value == '85':          # Error reading thermometer return 85 ! 
+                self.log.error(u"### Sensor '%s', BAD read temperature (85°)" % saddress)
+                return "failed"
             return value
         except ow.exUnknownSensor:
+            self.log.error(u"### Sensor '%s' NOT FOUND." % saddress)
             return "failed"
         except AttributeError:
-            raise OneWireException("### Error while reading value: '%s'" % traceback.format_exc())
+            self.log.error(u"### Sensor '%s', ERROR while reading value." % sensor)
+            return "failed"
 
 
 
@@ -128,8 +134,6 @@ class OnewireRead:
                 if "temperature" in self.sensor_properties:
                     val = "%.1f" % float(val)
                 self.send(self.device_id, self.device_name, val)
-            else:
-                self.log.error(u"### Sensor '%s' for device '%s' not found, Attempting to read it in the next interval" % (self.sensor_address, self.device_name))
             self.log.debug(u"=> '{0}' : wait for {1} seconds".format(self.device_name, self.interval))
             self.stop.wait(self.interval)
 
