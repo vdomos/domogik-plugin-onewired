@@ -1,0 +1,24 @@
+{% extends theme("base/base.html") %}
+{% import theme("base/wtf.html") as wtf %}
+
+{% block content %}
+{% include theme("client_menu.html") %}
+<div class="container">
+<h2>{% trans %}Onewired devices informations{% endtrans %}</H2>
+{% if informations['device'] == true %}
+<p>{% trans %}Device found. Model  {% endtrans %}: <strong>{{ informations['device_model'] }}</strong></p>
+<table class='table'>
+  <thead>
+    <tr><th>{% trans %}Type{% endtrans %}</th><th>{% trans %}Id{% endtrans %}</th></tr>
+  </thead>
+  <tbody>
+  {% for dev in informations['1w_devices'] %}
+    <tr><td>{{ dev['type'] }}</td><td>{{ dev['id'] }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No onewired device found.</p>
+{% endif %}
+</div>
+{% endblock %}
