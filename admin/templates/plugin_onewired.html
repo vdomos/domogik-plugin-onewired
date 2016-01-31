@@ -6,7 +6,7 @@
 <div class="container">
 <h2>{% trans %}Onewired devices informations{% endtrans %}</H2>
 {% if informations['device'] == true %}
-<p>{% trans %}Device found. Model  {% endtrans %}: <strong>{{ informations['device_model'] }}</strong></p>
+<p>{% trans %}Chips found en 1-wire device  {% endtrans %}: <strong>{{ informations['device_type'] }}</strong></p>
 <table class='table'>
   <thead>
     <tr><th>{% trans %}Type{% endtrans %}</th><th>{% trans %}Id{% endtrans %}</th></tr>
@@ -21,4 +21,10 @@
 <p>No onewired device found.</p>
 {% endif %}
 </div>
+
+<div class="container">
+<h2>{% trans %}Last errors in plugin log{% endtrans %}</H2>
+<pre>{{ errorlog }}</pre>
+</div>
+
 {% endblock %}
