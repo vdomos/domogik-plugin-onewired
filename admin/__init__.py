@@ -21,7 +21,7 @@ def get_informations():
              "device_model" : None,
              "1w_devices" : []}
     try:
-        ow.init("u") # initialize USB
+        ow.init("u") # initialize ow
         info['device_model'] = "usb"
         info['device'] = True
         
