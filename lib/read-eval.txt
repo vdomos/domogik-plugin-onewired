@@ -1,0 +1,7 @@
+﻿		try:
+			self.log.info("==> Lecture sensor '%s%s/%s'" % (self._root, saddress, stype))
+			sensorObj = ow.Sensor(str(self._root + saddress))
+			value = eval("sensorObj." + stype + ".strip()")
+			return value 
+		except AttributeError:
+			raise OneWireException("### Error while reading value: '%s'" % traceback.format_exc())

@@ -35,13 +35,11 @@ Implements
 @organization: Domogik
 """
 
-
 from domogik.common.plugin import Plugin
 from domogikmq.message import MQMessage
 
 from domogik_packages.plugin_onewired.lib.onewired import OneWireException
 from domogik_packages.plugin_onewired.lib.onewired import OneWireNetwork
-from domogik_packages.plugin_onewired.lib.onewired import OnewireRead
 
 import threading
 import time
@@ -49,6 +47,7 @@ import time
 
 class OnewireNetManager(Plugin):
 
+    # -------------------------------------------------------------------------------------------------
     def __init__(self):
         """
             Init plugin
@@ -77,7 +76,7 @@ class OnewireNetManager(Plugin):
 
         # ### Open one wire network
         try:
-            onewire = OneWireNetwork(self.log, onewire_device, onewire_cache)
+            self.onewire = OneWireNetwork(self.log, onewire_device, onewire_cache)
         except OneWireException as e:
             self.log.error(e.value)
             print(e.value)
@@ -86,67 +85,70 @@ class OnewireNetManager(Plugin):
 
 
         # ### For each device
+        self.device_list = {}
         threads = {}
         for a_device in self.devices:
             # self.log.info(u"a_device:   %s" % format(a_device))
 
-            device_name = a_device["name"]                                            # Ex.: "Temp vesta"
-            device_id = a_device["id"]                                                # Ex.: "73"
-            device_type = a_device["device_type_id"]                                # Ex.: "onewire.thermometer_temp | onewire.batterymonitor_voltage"
-            sensor_interval = self.get_parameter(a_device, "interval")
+            device_name = a_device["name"]                                      # Ex.: "Temp vesta"
+            device_id = a_device["id"]                                          # Ex.: "73"
+            device_type = a_device["device_type_id"]                            # Ex.: "onewire.thermometer_temp | onewire.batterymonitor_voltage"
             sensor_properties = self.get_parameter(a_device, "properties")
             sensor_address = self.get_parameter(a_device, "device")
-            if device_type != "onewire.pio_output":
+            self.device_list.update({device_id : {'name': device_name, 'address': sensor_address, 'properties': sensor_properties}})
+
+            if device_type != "onewire.pio_output_switch":
+                sensor_interval = self.get_parameter(a_device, "interval")
                 self.log.info(u"==> Device '{0}' (id:{1}/{2}), sensor = {3}/{4}".format(device_name, device_id, device_type, sensor_address, sensor_properties))
                 # Affiche: INFO ==> Device 'TempExt' (id:4/onewire.thermometer_temp), sensor = 28.7079D0040000/temperature
-                self.log.info(u"==> Sensor list of device '{0}': '{1}'".format(device_id, self.sensors[device_id]))
-                # Affiche: INFO ==> Sensor list of device id:5: '{u'1-wire counter diff': 38, u'1-wire counter': 37}'
+                # self.log.debug(u"==> Sensor list of device '{0}': '{1}'".format(device_id, self.sensors[device_id]))
+                # Affiche: INFO ==> Sensor list of device id:5: '{u'onewire counter diff': 38, u'onewire counter': 37}'
 
                 if sensor_interval > 0:
-                    self.log.info(u"==> Launch thread for '%s' device !" % device_name)
-                    thr_name = "dev_{0}".format(a_device['id'])
+                    self.log.debug(u"==> Launch reading thread for '%s' device !" % device_name)
+                    thr_name = "dev_{0}".format(device_id)
                     threads[thr_name] = threading.Thread(None,
-                                                            OnewireRead,
+                                                            self.onewire.loop_read_sensor,
                                                             thr_name,
-                                                            (self.log,
-                                                                onewire,
-                                                                device_id,
+                                                                (device_id,
                                                                 device_name,
                                                                 sensor_address,
                                                                 sensor_properties,
                                                                 sensor_interval,
-                                                                self.send_data,
+                                                                self.send_pub_data,
                                                                 self.get_stop()),
-                                                        {})
+                                                            {})
                     threads[thr_name].start()
                     self.register_thread(threads[thr_name])
                     self.log.info(u"==> Wait some time before running the next scheduled threads ...")
                     time.sleep(5)        # Wait some time to not start the threads with the same interval et the same time.
                 else:
-                    self.log.info(u"==> Onewire sensor thread '%s' for '%s' device is DISABLED (interval < 0) !" % (thr_name, device_name))
+                    self.log.debug(u"==> Reading thread for '%s' device is DISABLED (interval < 0) !" % device_name)
 
             else:
-                pass        # TODO: For ouput => listener !
+                self.log.info(u"==> Device '{0}' (id:{1}/{2}), command = {3}/{4}".format(device_name, device_id, device_type, sensor_address, sensor_properties))
 
         self.ready()
 
 
-    def send_data(self, device_id, device_name, value):
+    # -------------------------------------------------------------------------------------------------
+    def send_pub_data(self, device_id, value):
         """ Send the sensors values over MQ
         """
         data = {}
         for sensor in self.sensors[device_id]:                  # "for" nécessaire pour les 2 sensors counter : '1-wire counter diff' et '1-wire counter'
             data[self.sensors[device_id][sensor]] = value       # sensor = sensor name in info.json file
-        self.log.debug(u"==> Send 0MQ message '%s' for device id %s (%s)" % (format(data), device_id, device_name))        # {u'id': u'value'}
+        self.log.debug(u"==> Update Sensor '%s' for device id %s (%s)" % (format(data), device_id, self.device_list[device_id]["name"]))    # {u'id': u'value'}
 
         try:
             self._pub.send_event('client.sensor', data)
         except:
-            # We ignore the message if some values are not correct because it can happen with rainhour ...
+            # We ignore the message if some values are not correct
             self.log.debug(u"Bad MQ message to send. This may happen due to some invalid rainhour data. MQ data is : {0}".format(data))
             pass
 
 
+    # -------------------------------------------------------------------------------------------------
     def on_mdp_request(self, msg):
         """ Called when a MQ req/rep message is received
         """
@@ -156,14 +158,40 @@ class OnewireNetManager(Plugin):
             reason = None
             status = True
             data = msg.get_data()
-            self.log.info(u"==> Received 0MQ messages data: %s" % format(data))
+            
+            device_id = data["device_id"]
+            command_id = data["command_id"]
+            if device_id not in self.device_list:
+                self.log.error(u"### MQ REQ command, Device ID '%s' unknown, Have you restarted the plugin after device creation ?" % device_id)
+                status = False
+                reason = u"Plugin onewired: Unknown device ID %d" % device_id
+                self.send_rep_ack(status, reason, command_id, "unknown") ;                      # Reply MQ REP (acq) to REQ command
+                return
 
-            self.log.info(u"Reply to command 0MQ")
+            device_name = self.device_list[device_id]["name"]
+            self.log.info(u"==> Received for device '%s' MQ REQ command message: %s" % (device_name, format(data)))         # {u'command_id': 70, u'value': u'1', u'device_id': 169}
+
+            status, reason = self.onewire.writeSensor(self.device_list[device_id]["address"], self.device_list[device_id]["properties"], data["value"])
+            if status:
+                self.send_pub_data(device_id, data["value"])    # Update sensor command.
+            
+            self.log.info(u"==> Reply MQ REP (acq) to REQ command id '%s' for device '%s'" % (command_id, device_name))
             reply_msg = MQMessage()
             reply_msg.set_action('client.cmd.result')
             reply_msg.add_data('status', status)
             reply_msg.add_data('reason', reason)
             self.reply(reply_msg.get())
+
+    # -------------------------------------------------------------------------------------------------
+    def send_rep_ack(self, status, reason, cmd_id, dev_name):
+        """ Send MQ REP (acq) to command
+        """
+        self.log.info(u"==> Reply MQ REP (acq) to REQ command id '%s' for device '%s'" % (cmd_id, dev_name))
+        reply_msg = MQMessage()
+        reply_msg.set_action('client.cmd.result')
+        reply_msg.add_data('status', status)
+        reply_msg.add_data('reason', reason)
+        self.reply(reply_msg.get())
 
 
 if __name__ == "__main__":

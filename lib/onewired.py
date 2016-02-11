@@ -43,7 +43,6 @@ class OneWireException(Exception):
     """
     OneWire exception
     """
-
     def __init__(self, value):
         Exception.__init__(self)
         self.value = value
@@ -56,7 +55,7 @@ class OneWireNetwork:
     """
     Get informations about 1wire network
     """
-
+    # -------------------------------------------------------------------------------------------------
     def __init__(self, log, dev='u', cache=False):
         """
         Create OneWire instance, allowing to use OneWire Network
@@ -79,10 +78,8 @@ class OneWireNetwork:
         except:
             raise OneWireException(u"### Access to onewire device is not possible:  %s" % traceback.format_exc())
 
-        # self.sensortype2datatype = {"temperature" : "temp", "temperature9" : "temp", "humidity" : "humidity", "VAD" : "voltage", "vis" : "voltage", "B1-R1-A/pressure": "pressure" }
 
-
-
+    # -------------------------------------------------------------------------------------------------
     def readSensor(self, saddress, sprop):
         """
         ow.Sensor don't work with sensor directory be replace by ow.owfs_get
@@ -103,37 +100,41 @@ class OneWireNetwork:
             return "failed"
 
 
+    # -------------------------------------------------------------------------------------------------
+    def writeSensor(self, saddress, sprop, value):
+        """
+            Write 1-wire chip 'adress/sprop' with 'value'
+        """
+        try:
+            ow.Sensor(str(saddress))                            # Need it because "owfs_put" don't return error !
+            sensor = self._root + saddress + "/" + sprop
+            self.log.info(u"==> Writing sensor '%s'" % sensor)
+            ow.owfs_put(str(sensor), str(value))                # Ex.: ow.owfs_put('/05.3A9233000000/PIO', '1')
+        except ow.exUnknownSensor:
+            errorstr = u"### Sensor '%s' NOT FOUND." % saddress
+            self.log.error(errorstr)
+            return False, errorstr
+        except AttributeError:
+            errorstr = u"### Sensor '%s', ERROR while writing value." % sensor
+            self.log.error(errorstr)
+            return False, errorstr
+        return True, None
 
-class OnewireRead:
-    """
-    To read onewire sensor
-    """
 
-    def __init__(self, log, onewire, devid, device, address, properties, interval, send, stop):
+
+    # -------------------------------------------------------------------------------------------------
+    def loop_read_sensor(self, deviceid, device, address, properties, interval, send, stop):
         """
         """
-        self.log = log
-        self.onewire = onewire
-        self.device_id = devid
-        self.device_name = device
-        self.sensor_address = address
-        self.sensor_properties = properties
-        self.interval = interval
-        self.send = send
-        self.stop = stop
-
-        self.start_read_sensor()
-
-
-    def start_read_sensor(self):
-        """
-        """
-        while not self.stop.isSet():
-            val = self.onewire.readSensor(self.sensor_address, self.sensor_properties)
+        while not stop.isSet():
+            val = self.readSensor(address, properties)
             if val != "failed":
-                if "temperature" in self.sensor_properties:
+                if "temperature" in properties:
                     val = "%.1f" % float(val)
-                self.send(self.device_id, self.device_name, val)
-            self.log.debug(u"=> '{0}' : wait for {1} seconds".format(self.device_name, self.interval))
-            self.stop.wait(self.interval)
+                send(deviceid, val)
+            self.log.debug(u"=> '{0}' : wait for {1} seconds".format(device, interval))
+            stop.wait(interval)
+
+
+
 
