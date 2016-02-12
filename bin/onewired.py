@@ -175,12 +175,8 @@ class OnewireNetManager(Plugin):
             if status:
                 self.send_pub_data(device_id, data["value"])    # Update sensor command.
             
-            self.log.info(u"==> Reply MQ REP (acq) to REQ command id '%s' for device '%s'" % (command_id, device_name))
-            reply_msg = MQMessage()
-            reply_msg.set_action('client.cmd.result')
-            reply_msg.add_data('status', status)
-            reply_msg.add_data('reason', reason)
-            self.reply(reply_msg.get())
+            # Reply MQ REP (acq) to REQ command
+            self.send_rep_ack(status, reason, command_id, device_name) ;
 
     # -------------------------------------------------------------------------------------------------
     def send_rep_ack(self, status, reason, cmd_id, dev_name):
