@@ -413,9 +413,9 @@
                 ]
             },
             "onewire.pio_input_switch": {
-                "description": "PIO Input (DS2405/06/07/08)", 
+                "description": "PIO Input (DS2405..08)", 
                 "id": "onewire.input_switch", 
-                "name": "PIO Input Switch (DS2405/06/07/08)",
+                "name": "PIO Input Switch (DS2405..08)",
                 "commands": [],
                 "sensors": ["onewire input switch"],
                 "parameters": [
@@ -454,9 +454,9 @@
                 ]
             },
             "onewire.pio_input_openclose": {
-                "description": "PIO Input (DS2405/06/07/08)", 
+                "description": "PIO Input (DS2405..08)", 
                 "id": "onewire.input_openclose", 
-                "name": "PIO Input OpenClose (DS2405/06/07/08)",
+                "name": "PIO Input OpenClose (DS2405..08)",
                 "commands": [],
                 "sensors": ["onewire input openclose"],
                 "parameters": [
@@ -495,9 +495,9 @@
                 ]
             },
             "onewire.pio_output_switch": {
-                "description": "PIO Output (DS2405/06/07/08)", 
+                "description": "PIO Output (DS2405..08)", 
                 "id": "onewire.output_switch", 
-                "name": "PIO Output Switch (DS2405/06/07/08)",
+                "name": "PIO Output Switch (DS2405..08)",
                 "commands": ["onewire output switch cmd"],
                 "sensors": ["onewire output switch"],
                 "parameters": [
