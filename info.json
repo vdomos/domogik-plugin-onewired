@@ -81,7 +81,7 @@
             },
             "onewire pressure": {
                 "name": "Pressure",
-                "data_type": "DT_Pression",
+                "data_type": "DT_Pressure",
                 "conversion": "",
                 "incremental": false,
                 "timeout": 600,
