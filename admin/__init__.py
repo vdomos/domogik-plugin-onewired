@@ -29,8 +29,11 @@ def get_informations():
         pass
 
     if info['device'] == True:
-        for device in ow.Sensor("/").find(all = True):    #.find(type = "DS18B20"):
-            info['1w_devices'].append({"type" : device.type, "id" : device.family + '.' + device.id})
+        try:
+            for device in ow.Sensor("/").find(all = True):    #.find(type = "DS18B20"):
+                info['1w_devices'].append({"type" : device.type, "id" : device.family + '.' + device.id})
+        except Exception as error:
+            info['1w_devices'].append({"type" : "EXCEPTION ERROR", "id" : error})
     return info
 
 
