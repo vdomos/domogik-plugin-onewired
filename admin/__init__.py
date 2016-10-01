@@ -30,9 +30,12 @@ def get_informations(device):
         pass
 
     if info['device'] == True:
-        for device in ow.Sensor("/").find(all = True):    #.find(type = "DS18B20"):
-            info['1w_devices'].append({"type" : device.type, "id" : device.family + '.' + device.id})
-            #print("List 1-wire chips found '%s'" % format(info['1w_devices']))
+        try:
+            for device in ow.Sensor("/").find(all = True):    #.find(type = "DS18B20"):
+                info['1w_devices'].append({"type" : device.type, "id" : device.family + '.' + device.id})
+                #print("List 1-wire chips found '%s'" % format(info['1w_devices']))
+        except Exception as error:
+            info['1w_devices'].append({"type" : "EXCEPTION ERROR" , "id" : error})
     return info
 
 

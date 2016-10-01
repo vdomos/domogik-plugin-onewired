@@ -35,7 +35,7 @@ class OneWireNetwork, OneWireException
 """
 
 import traceback
-import subprocess
+import time
 import ow
 
 
@@ -63,6 +63,7 @@ class OneWireNetwork:
         default 'u' for USB
         """
         self.log = log
+        self._sensors = []
         self.log.info(u"==> OWFS version : %s" % ow.__version__)
         try:
             ow.init(dev)
@@ -120,21 +121,28 @@ class OneWireNetwork:
             return False, errorstr
         return True, None
 
-
+    def add_sensor(self, deviceid, device, address, properties, interval):
+        """"Add a sensor to sensors list. """
+        self._sensors.append({'deviceid': deviceid, 'device': device, 'address': address, 'properties': properties, 'interval': interval, 'nextread': 0})
 
     # -------------------------------------------------------------------------------------------------
-    def loop_read_sensor(self, deviceid, device, address, properties, interval, send, stop):
+    def loop_read_sensor(self, send, stop):
         """
         """
+        self.log.info(u"Internal loop sensors reading started for {0} registered sensors.".format(len(self._sensors)))
         while not stop.isSet():
-            val = self.readSensor(address, properties)
-            if val != "failed":
-                if "temperature" in properties:
-                    val = "%.1f" % float(val)
-                send(deviceid, val)
-            self.log.debug(u"=> '{0}' : wait for {1} seconds".format(device, interval))
-            stop.wait(interval)
-
-
+            try :  # catch error if self._sensors modify during iteration
+                for sensor in self._sensors:
+                    if time.time() >= sensor['nextread'] :
+                        sensor['nextread'] = time.time() + sensor['interval']
+                        val = self.readSensor(sensor['address'], sensor['properties'])
+                        if val != "failed":
+                            if "temperature" in sensor['properties']:
+                                val = "%.1f" % float(val)
+                            send(sensor['deviceid'], val)
+                        self.log.debug(u"=> '{0}' : wait for {1} seconds".format(sensor['device'], sensor['interval']))
+            except:
+                pass
+            stop.wait(0.1)
 
 

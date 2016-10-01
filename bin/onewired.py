@@ -42,7 +42,6 @@ from domogik_packages.plugin_onewired.lib.onewired import OneWireException
 from domogik_packages.plugin_onewired.lib.onewired import OneWireNetwork
 
 import threading
-import time
 
 
 class OnewireNetManager(Plugin):
@@ -86,7 +85,7 @@ class OnewireNetManager(Plugin):
 
         # ### For each device
         self.device_list = {}
-        threads = {}
+        thread_sensors = None
         for a_device in self.devices:
             # self.log.info(u"a_device:   %s" % format(a_device))
 
@@ -105,29 +104,25 @@ class OnewireNetManager(Plugin):
                 # Affiche: INFO ==> Sensor list of device id:5: '{u'onewire counter diff': 38, u'onewire counter': 37}'
 
                 if sensor_interval > 0:
-                    self.log.debug(u"==> Launch reading thread for '%s' device !" % device_name)
-                    thr_name = "dev_{0}".format(device_id)
-                    threads[thr_name] = threading.Thread(None,
-                                                            self.onewire.loop_read_sensor,
-                                                            thr_name,
-                                                                (device_id,
-                                                                device_name,
-                                                                sensor_address,
-                                                                sensor_properties,
-                                                                sensor_interval,
-                                                                self.send_pub_data,
-                                                                self.get_stop()),
-                                                            {})
-                    threads[thr_name].start()
-                    self.register_thread(threads[thr_name])
-                    self.log.info(u"==> Wait some time before running the next scheduled threads ...")
-                    time.sleep(5)        # Wait some time to not start the threads with the same interval et the same time.
+                    self.log.debug(u"==> Add '%s' device in reading thread" % device_name)
+                    self.onewire.add_sensor(device_id,
+                                                    device_name,
+                                                    sensor_address,
+                                                    sensor_properties,
+                                                    sensor_interval)
                 else:
                     self.log.debug(u"==> Reading thread for '%s' device is DISABLED (interval < 0) !" % device_name)
 
             else:
                 self.log.info(u"==> Device '{0}' (id:{1}/{2}), command = {3}/{4}".format(device_name, device_id, device_type, sensor_address, sensor_properties))
 
+        thread_sensors = threading.Thread(None,
+                                          self.onewire.loop_read_sensor,
+                                          'Main_reading_sensors',
+                                          (self.send_pub_data, self.get_stop()),
+                                          {})
+        thread_sensors.start()
+        self.register_thread(thread_sensors)
         self.ready()
 
 
