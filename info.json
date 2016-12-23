@@ -1,498 +1,552 @@
 { 
-	"json_version": 2,
-	
-	"products" : [], 
-	
-	"configuration": [		
-		{
-			"default": "u", 
-			"description": "1-Wire adapter device (usb : 'u')", 
-			"key": "1-wire_device", 
-			"name": "1-Wire Device",
-			"required": "yes", 
-			"type": "string"
-		}, 
-		{
-			"default": "True", 
-			"description": "If you use have a lot of 1wire devices you should use the cache.", 
-			"key": "1-wire_cache", 
-			"name": "Use OWFS cache",
-			"required": "no", 
-			"type": "boolean"
-		}
-	], 
-	
-	"commands": { 
-        "1-wire_cmd_output" : {
-            "name" : "1-wire cmd output",
+    "json_version": 2,
+    
+    "products" : [], 
+    
+    "configuration": [        
+        {
+            "default": "u", 
+            "description": "1-Wire device (usb: 'u', lan: 'host:4304')", 
+            "key": "1-wire_device", 
+            "name": "1-Wire Device",
+            "required": "yes", 
+            "type": "string"
+        }, 
+        {
+            "default": "True", 
+            "description": "If you use have a lot of 1wire devices you should use the cache.", 
+            "key": "1-wire_cache", 
+            "name": "Use OWFS cache",
+            "required": "no", 
+            "type": "boolean"
+        }
+    ], 
+
+    "commands": { 
+        "onewire output switch cmd" : {
+            "name" : "Output Switch",
             "return_confirmation" : true,
             "parameters" : [
                 {
-                    "key" : "current",
-                    "data_type" : "DT_Bool",
+                    "key" : "value",
+                    "data_type" : "DT_Switch",
                     "conversion" : "" 
                 }
             ]
         }
-	},
-	
-	
-	"sensors": {
-			"1-wire temperature": {
-				"name": "Temperature",
-				"data_type": "DT_Temp",
-				"conversion": "",
-				"incremental": false,
-				"timeout": 600,
-				"history": {
-					"store": true,
-					"duplicate": false,
-					"max": 0,
-					"expire": 0,
-					"round_value": 0
-				}
-			},
-			"1-wire humidity": {
-				"name": "Humidity",
-				"data_type": "DT_Humidity",
-				"conversion": "",
-				"incremental": false,
-				"timeout": 600,
-				"history": {
-					"store": true,
-					"duplicate": false,
-					"max": 0,
-					"expire": 0,
-					"round_value": 0
-				}
-			},
-			"1-wire luminosity": {
-				"name": "Luminosity",
-				"data_type": "DT_Brightness",
-				"conversion": "",
-				"incremental": false,
-				"timeout": 600,
-				"history": {
-					"store": true,
-					"duplicate": false,
-					"max": 0,
-					"expire": 0,
-					"round_value": 0
-				}
-			},
-			"1-wire pressure": {
-				"name": "Pressure",
-				"data_type": "DT_Pression",
-				"conversion": "",
-				"incremental": false,
-				"timeout": 600,
-				"history": {
-					"store": true,
-					"duplicate": false,
-					"max": 0,
-					"expire": 0,
-					"round_value": 0
-				}
-			},
-			"1-wire voltage": {
-				"name": "Voltage",
-				"data_type": "DT_Volt",
-				"conversion": "",
-				"incremental": false,
-				"timeout": 600,
-				"history": {
-					"store": true,
-					"duplicate": false,
-					"max": 0,
-					"expire": 0,
-					"round_value": 0
-				}
-			},
-			"1-wire counter": {
-				"name": "Counter",
-				"data_type": "DT_Number",
-				"conversion": "",
-				"incremental": false,
-				"timeout": 600,
-				"history": {
-					"store": true,
-					"duplicate": false,
-					"max": 0,
-					"expire": 0,
-					"round_value": 0
-				}
-			},
-			"1-wire counter diff": {
-				"name": "Counter diff",
-				"data_type": "DT_Number",
-				"conversion": "",
-				"incremental": true,
-				"timeout": 600,
-				"history": {
-					"store": true,
-					"duplicate": true,
-					"max": 0,
-					"expire": 0,
-					"round_value": 0
-				}
-			},
-			"1-wire input": {
-				"name": "Input",
-				"data_type": "DT_Bool",
-				"conversion": "",
-				"incremental": false,
-				"timeout": 600,
-				"history": {
-					"store": true,
-					"duplicate": false,
-					"max": 0,
-					"expire": 0,
-					"round_value": 0
-				}
-			},
-			"1-wire output": {
-				"name": "Output",
-				"data_type": "DT_Bool",
-				"conversion": "",
-				"incremental": false,
-				"timeout": 0,
-				"history": {
-					"store": true,
-					"duplicate": true,
-					"max": 0,
-					"expire": 0,
-					"round_value": 0
-				}
-			}
-		},
-	
-	"device_types": {
-			"onewire.thermometer_temp": {
-				"description": "Thermometer (DS18B20, DS18S20)", 
-				"id": "onewire.thermometer_temp", 
-				"name": "Thermometer (DS18B20, DS18S20)",
-				"commands": [],
-				"sensors": ["1-wire temperature"],
-				"parameters": [
-					{
-						"key": "interval",
-						"xpl": false,
-						"description": "Interval in secondes between reading sensors (plugin must be restart).",
-						"type": "integer",
-						"default": "60"
-					},
-					{
-						"key": "properties",
-						"xpl": false,
-						"description": "Sensor Attribute",
-						"type": "choice",
-						"choices" : {
-							"temperature" : "temperature",
-							"temperature9" : "temperature9",
-							"temperature10" : "temperature10",
-							"temperature11" : "temperature11",
-							"temperature12" : "temperature12"
-                        }
-					},
-					{
-						"key": "device",
-						"xpl": false,
-						"description": "The hexadecimal sensor address",
-						"type": "string"
-					}
-				]
-			}, 
-			"onewire.batterymonitor_temp": {
-				"description": "Battery monitor (DS2438)", 
-				"id": "onewire.batterymonitor_temp", 
-				"name": "Battery monitor temperature (DS2438)",
-				"commands": [],
-				"sensors": ["1-wire temperature"],
-				"parameters": [
-					{
-						"key": "interval",
-						"xpl": false,
-						"description": "Interval in secondes between reading sensors (plugin must be restart).",
-						"type": "integer",
-						"default": "60"
-					},
-					{
-						"key": "properties",
-						"xpl": false,
-						"description": "Sensor Attribute",
-						"type": "choice",
-						"choices" : {
-							"temperature" : "temperature"
-                         }
-					},
-					{
-						"key": "device",
-						"xpl": false,
-						"description": "The hexadecimal address",
-						"type": "string"
-					}
-				]
-			}, 
-			"onewire.batterymonitor_humidity": {
-				"description": "Battery monitor (DS2438)", 
-				"id": "onewire.batterymonitor_humidity", 
-				"name": "Battery monitor humidity (DS2438)",
-				"commands": [],
-				"sensors": ["1-wire humidity"],
-				"parameters": [
-					{
-						"key": "interval",
-						"xpl": false,
-						"description": "Interval in secondes between reading sensors (plugin must be restart).",
-						"type": "integer",
-						"default": "60"
-					},
-					{
-						"key": "properties",
-						"xpl": false,
-						"description": "Sensor Attribute",
-						"type": "choice",
-						"choices" : {
-							"humidity" : "humidity",
-							"HIH3600/humidity" : "HIH3600/humidity",
- 							"HIH4000/humidity" : "HIH4000/humidity",
- 							"HTM1735/humidity" : "HTM1735/humidity",
-							"VAD" : "VAD",
-							"vis" : "vis"
-                         }
-					},
-					{
-						"key": "device",
-						"xpl": false,
-						"description": "The hexadecimal address",
-						"type": "string"
-					}
-				]
-			},
-			"onewire.batterymonitor_pressure": {
-				"description": "Battery monitor (DS2438)", 
-				"id": "onewire.batterymonitor_pressure", 
-				"name": "Battery monitor pressure (DS2438)",
-				"commands": [],
-				"sensors": ["1-wire pressure"],
-				"parameters": [
-					{
-						"key": "interval",
-						"xpl": false,
-						"description": "Interval in secondes between reading sensors (plugin must be restart).",
-						"type": "integer",
-						"default": "60"
-					},
-					{
-						"key": "properties",
-						"xpl": false,
-						"description": "Sensor Attribute",
-						"type": "choice",
-						"choices" : {
-							"B1-R1-A/pressure" : "B1-R1-A/pressure",
-							"VAD" : "VAD",
-							"vis" : "vis"
-                         }
-					},
-					{
-						"key": "device",
-						"xpl": false,
-						"description": "The hexadecimal address",
-						"type": "string"
-					}
-				]
-			},
-			"onewire.batterymonitor_luminosity": {
-				"description": "Battery monitor (DS2438)", 
-				"id": "onewire.batterymonitor_luminosity", 
-				"name": "Battery monitor luminosity (DS2438)",
-				"commands": [],
-				"sensors": ["1-wire luminosity"],
-				"parameters": [
-					{
-						"key": "interval",
-						"xpl": false,
-						"description": "Interval in secondes between reading sensors (plugin must be restart).",
-						"type": "integer",
-						"default": "60"
-					},
-					{
-						"key": "properties",
-						"xpl": false,
-						"description": "Sensor Attribute",
-						"type": "choice",
-						"choices" : {
-							"S3-R1-A/illuminance" : "S3-R1-A/illuminance",
-							"VAD" : "VAD",
-							"vis" : "vis"
-                         }
-					},
-					{
-						"key": "device",
-						"xpl": false,
-						"description": "The hexadecimal address",
-						"type": "string"
-					}
-				]
-			},
-			"onewire.batterymonitor_voltage": {
-				"description": "Battery monitor (DS2438)", 
-				"id": "onewire.batterymonitor_voltage", 
-				"name": "Battery monitor voltage (DS2438)",
-				"commands": [],
-				"sensors": ["1-wire voltage"],
-				"parameters": [
-					{
-						"key": "interval",
-						"xpl": false,
-						"description": "Interval in secondes between reading sensors (plugin must be restart).",
-						"type": "integer",
-						"default": "60"
-					},
-					{
-						"key": "properties",
-						"xpl": false,
-						"description": "Sensor Attribute",
-						"type": "choice",
-						"choices" : {
-							"VAD" : "VAD",
-							"vis" : "vis"
-                         }
-					},
-					{
-						"key": "device",
-						"xpl": false,
-						"description": "The hexadecimal address",
-						"type": "string"
-					}
-				]
-			},
-			"onewire.counter_count": {
-				"description": "Counter/RAM (DS2423)", 
-				"id": "onewire.counter_count", 
-				"name": "Counter (DS2423)",
-				"commands": [],
-				"sensors": ["1-wire counter", "1-wire counter diff"],
-				"parameters": [
-					{
-						"key": "interval",
-						"xpl": false,
-						"description": "Interval in secondes between reading sensors (plugin must be restart).",
-						"type": "integer",
-						"default": "60"
-					},
-					{
-						"key": "properties",
-						"xpl": false,
-						"description": "Sensor Attribute",
-						"type": "choice",
-						"choices" : {
-							"counters.A" : "counters.A",
-							"counters.B" : "counters.B"
-                         }
-					},
-					{
-						"key": "device",
-						"xpl": false,
-						"description": "The hexadecimal address",
-						"type": "string"
-					}
-				]
-			},
-			"onewire.pio_input": {
-				"description": "PIO Input (DS2405/06/07/08)", 
-				"id": "onewire.pio_input", 
-				"name": "PIO Input (DS2405/06/07/08)",
-				"commands": [],
-				"sensors": ["1-wire input"],
-				"parameters": [
-					{
-						"key": "properties",
-						"xpl": false,
-						"description": "Sensor Attribute",
-						"type": "choice",
-						"choices" : {
-							"sensed" : "Input (DS2405 sensed)",
-							"sensed.A" : "Input A (DS2406/7)",
-							"sensed.B" : "Input B (DS2406/7)",
-							"sensed.0" : "Input 0 (DS2408)",
-							"sensed.1" : "Input 1 (DS2408)",
-							"sensed.2" : "Input 2 (DS2408)",
-							"sensed.3" : "Input 3 (DS2408)",
-							"sensed.4" : "Input 4 (DS2408)",
-							"sensed.5" : "Input 5 (DS2408)",
-							"sensed.6" : "Input 6 (DS2408)",
-							"sensed.7" : "Input 7 (DS2408)"
-                         }
-					},
-					{
-						"key": "interval",
-						"xpl": false,
-						"description": "Interval in secondes between reading sensors (plugin must be restart).",
-						"type": "integer",
-						"default": "60"
-					},
-					{
-						"key": "device",
-						"xpl": false,
-						"description": "The hexadecimal address",
-						"type": "string"
-					}
-				]
-			},
-			"onewire.pio_output": {
-				"description": "PIO Output (DS2405/06/07/08)", 
-				"id": "onewire.pio_output", 
-				"name": "PIO Output (DS2405/06/07/08)",
-				"commands": ["1-wire_cmd_output"],
-				"sensors": ["1-wire output"],
-				"parameters": [
-					{
-						"key": "properties",
-						"xpl": false,
-						"description": "Sensor Attribute",
-						"type": "choice",
-						"choices" : {
-							"PIO" : "Output (DS2405)",
-							"PIO.A" : "Output A (DS2406/7)",
-							"PIO.B" : "Output B (DS2406/7)",
-							"PIO.0" : "Output 0 (DS2408)",
-							"PIO.1" : "Output 1 (DS2408)",
-							"PIO.2" : "Output 2 (DS2408)",
-							"PIO.3" : "Output 3 (DS2408)",
-							"PIO.4" : "Output 4 (DS2408)",
-							"PIO.5" : "Output 5 (DS2408)",
-							"PIO.6" : "Output 6 (DS2408)",
-							"PIO.7" : "Output 7 (DS2408)"
-                         }
-					},
-					{
-						"key": "device",
-						"xpl": false,
-						"description": "The hexadecimal address",
-						"type": "string"
-					}
-				]
-			} 
-		},
-		
-	"xpl_stats": {},
-	"xpl_commands": {},
+    },
 
-	"identity": {
-		"author": "domos", 
-		"author_email": "domos.vesta at gmail.com", 
-		"tags": ["protocole"], 
-		"dependencies": [
+    "sensors": {
+            "onewire temperature": {
+                "name": "Temperature",
+                "data_type": "DT_Temp",
+                "conversion": "",
+                "incremental": false,
+                "timeout": 600,
+                "history": {
+                    "store": true,
+                    "duplicate": false,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+            },
+            "onewire humidity": {
+                "name": "Humidity",
+                "data_type": "DT_Humidity",
+                "conversion": "",
+                "incremental": false,
+                "timeout": 600,
+                "history": {
+                    "store": true,
+                    "duplicate": false,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+            },
+            "onewire luminosity": {
+                "name": "Luminosity",
+                "data_type": "DT_Brightness",
+                "conversion": "",
+                "incremental": false,
+                "timeout": 600,
+                "history": {
+                    "store": true,
+                    "duplicate": false,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+            },
+            "onewire pressure": {
+                "name": "Pressure",
+                "data_type": "DT_Pressure",
+                "conversion": "",
+                "incremental": false,
+                "timeout": 600,
+                "history": {
+                    "store": true,
+                    "duplicate": false,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+            },
+            "onewire voltage": {
+                "name": "Voltage",
+                "data_type": "DT_Volt",
+                "conversion": "",
+                "incremental": false,
+                "timeout": 600,
+                "history": {
+                    "store": true,
+                    "duplicate": false,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+            },
+            "onewire counter": {
+                "name": "Counter",
+                "data_type": "DT_Number",
+                "conversion": "",
+                "incremental": false,
+                "timeout": 600,
+                "history": {
+                    "store": true,
+                    "duplicate": false,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+            },
+            "onewire counter diff": {
+                "name": "Counter diff",
+                "data_type": "DT_Number",
+                "conversion": "",
+                "incremental": true,
+                "timeout": 600,
+                "history": {
+                    "store": true,
+                    "duplicate": true,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+            },
+            "onewire input switch": {
+                "name": "Input Switch",
+                "data_type": "DT_Switch",
+                "conversion": "",
+                "incremental": false,
+                "timeout": 600,
+                "history": {
+                    "store": true,
+                    "duplicate": false,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+            },
+            "onewire input openclose": {
+                "name": "Input OpenClose",
+                "data_type": "DT_OpenClose",
+                "conversion": "",
+                "incremental": false,
+                "timeout": 600,
+                "history": {
+                    "store": true,
+                    "duplicate": false,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+            },
+            "onewire output switch": {
+                "name": "Output Switch",
+                "data_type": "DT_Switch",
+                "conversion": "",
+                "incremental": false,
+                "timeout": 0,
+                "history": {
+                    "store": true,
+                    "duplicate": true,
+                    "max": 0,
+                    "expire": 0,
+                    "round_value": 0
+                }
+            }
+        },
+    
+    "device_types": {
+            "onewire.thermometer_temp": {
+                "description": "Thermometer (DS18B20, DS18S20)", 
+                "id": "onewire.thermometer_temp", 
+                "name": "Thermometer (DS18B20, DS18S20)",
+                "commands": [],
+                "sensors": ["onewire temperature"],
+                "parameters": [
+                    {
+                        "key": "interval",
+                        "xpl": false,
+                        "description": "Interval in secondes between reading sensors (plugin must be restart).",
+                        "type": "integer",
+                        "default": "60"
+                    },
+                    {
+                        "key": "properties",
+                        "xpl": false,
+                        "description": "Sensor Attribute",
+                        "type": "choice",
+                        "choices" : {
+                            "temperature" : "temperature",
+                            "temperature9" : "temperature9",
+                            "temperature10" : "temperature10",
+                            "temperature11" : "temperature11",
+                            "temperature12" : "temperature12"
+                        }
+                    },
+                    {
+                        "key": "device",
+                        "xpl": false,
+                        "description": "The hexadecimal sensor address",
+                        "type": "string"
+                    }
+                ]
+            }, 
+            "onewire.batterymonitor_temp": {
+                "description": "Battery monitor (DS2438)", 
+                "id": "onewire.batterymonitor_temp", 
+                "name": "Battery monitor temperature (DS2438)",
+                "commands": [],
+                "sensors": ["onewire temperature"],
+                "parameters": [
+                    {
+                        "key": "interval",
+                        "xpl": false,
+                        "description": "Interval in secondes between reading sensors (plugin must be restart).",
+                        "type": "integer",
+                        "default": "60"
+                    },
+                    {
+                        "key": "properties",
+                        "xpl": false,
+                        "description": "Sensor Attribute",
+                        "type": "choice",
+                        "choices" : {
+                            "temperature" : "temperature"
+                         }
+                    },
+                    {
+                        "key": "device",
+                        "xpl": false,
+                        "description": "The hexadecimal address",
+                        "type": "string"
+                    }
+                ]
+            }, 
+            "onewire.batterymonitor_humidity": {
+                "description": "Battery monitor (DS2438)", 
+                "id": "onewire.batterymonitor_humidity", 
+                "name": "Battery monitor humidity (DS2438)",
+                "commands": [],
+                "sensors": ["onewire humidity"],
+                "parameters": [
+                    {
+                        "key": "interval",
+                        "xpl": false,
+                        "description": "Interval in secondes between reading sensors (plugin must be restart).",
+                        "type": "integer",
+                        "default": "60"
+                    },
+                    {
+                        "key": "properties",
+                        "xpl": false,
+                        "description": "Sensor Attribute",
+                        "type": "choice",
+                        "choices" : {
+                            "humidity" : "humidity",
+                            "HIH3600/humidity" : "HIH3600/humidity",
+                             "HIH4000/humidity" : "HIH4000/humidity",
+                             "HTM1735/humidity" : "HTM1735/humidity",
+                            "VAD" : "VAD",
+                            "vis" : "vis"
+                         }
+                    },
+                    {
+                        "key": "device",
+                        "xpl": false,
+                        "description": "The hexadecimal address",
+                        "type": "string"
+                    }
+                ]
+            },
+            "onewire.batterymonitor_pressure": {
+                "description": "Battery monitor (DS2438)", 
+                "id": "onewire.batterymonitor_pressure", 
+                "name": "Battery monitor pressure (DS2438)",
+                "commands": [],
+                "sensors": ["onewire pressure"],
+                "parameters": [
+                    {
+                        "key": "interval",
+                        "xpl": false,
+                        "description": "Interval in secondes between reading sensors (plugin must be restart).",
+                        "type": "integer",
+                        "default": "60"
+                    },
+                    {
+                        "key": "properties",
+                        "xpl": false,
+                        "description": "Sensor Attribute",
+                        "type": "choice",
+                        "choices" : {
+                            "B1-R1-A/pressure" : "B1-R1-A/pressure",
+                            "VAD" : "VAD",
+                            "vis" : "vis"
+                         }
+                    },
+                    {
+                        "key": "device",
+                        "xpl": false,
+                        "description": "The hexadecimal address",
+                        "type": "string"
+                    }
+                ]
+            },
+            "onewire.batterymonitor_luminosity": {
+                "description": "Battery monitor (DS2438)", 
+                "id": "onewire.batterymonitor_luminosity", 
+                "name": "Battery monitor luminosity (DS2438)",
+                "commands": [],
+                "sensors": ["onewire luminosity"],
+                "parameters": [
+                    {
+                        "key": "interval",
+                        "xpl": false,
+                        "description": "Interval in secondes between reading sensors (plugin must be restart).",
+                        "type": "integer",
+                        "default": "60"
+                    },
+                    {
+                        "key": "properties",
+                        "xpl": false,
+                        "description": "Sensor Attribute",
+                        "type": "choice",
+                        "choices" : {
+                            "S3-R1-A/illuminance" : "S3-R1-A/illuminance",
+                            "VAD" : "VAD",
+                            "vis" : "vis"
+                         }
+                    },
+                    {
+                        "key": "device",
+                        "xpl": false,
+                        "description": "The hexadecimal address",
+                        "type": "string"
+                    }
+                ]
+            },
+            "onewire.batterymonitor_voltage": {
+                "description": "Battery monitor (DS2438)", 
+                "id": "onewire.batterymonitor_voltage", 
+                "name": "Battery monitor voltage (DS2438)",
+                "commands": [],
+                "sensors": ["onewire voltage"],
+                "parameters": [
+                    {
+                        "key": "interval",
+                        "xpl": false,
+                        "description": "Interval in secondes between reading sensors (plugin must be restart).",
+                        "type": "integer",
+                        "default": "60"
+                    },
+                    {
+                        "key": "properties",
+                        "xpl": false,
+                        "description": "Sensor Attribute",
+                        "type": "choice",
+                        "choices" : {
+                            "VAD" : "VAD",
+                            "vis" : "vis"
+                         }
+                    },
+                    {
+                        "key": "device",
+                        "xpl": false,
+                        "description": "The hexadecimal address",
+                        "type": "string"
+                    }
+                ]
+            },
+            "onewire.counter_count": {
+                "description": "Counter/RAM (DS2423)", 
+                "id": "onewire.counter_count", 
+                "name": "Counter (DS2423)",
+                "commands": [],
+                "sensors": ["onewire counter", "onewire counter diff"],
+                "parameters": [
+                    {
+                        "key": "interval",
+                        "xpl": false,
+                        "description": "Interval in secondes between reading sensors (plugin must be restart).",
+                        "type": "integer",
+                        "default": "60"
+                    },
+                    {
+                        "key": "properties",
+                        "xpl": false,
+                        "description": "Sensor Attribute",
+                        "type": "choice",
+                        "choices" : {
+                            "counters.A" : "counters.A",
+                            "counters.B" : "counters.B"
+                         }
+                    },
+                    {
+                        "key": "device",
+                        "xpl": false,
+                        "description": "The hexadecimal address",
+                        "type": "string"
+                    }
+                ]
+            },
+            "onewire.pio_input_switch": {
+                "description": "PIO Input (DS2405..08)", 
+                "id": "onewire.input_switch", 
+                "name": "PIO Input Switch (DS2405..08)",
+                "commands": [],
+                "sensors": ["onewire input switch"],
+                "parameters": [
+                    {
+                        "key": "properties",
+                        "xpl": false,
+                        "description": "Sensor Attribute",
+                        "type": "choice",
+                        "choices" : {
+                            "sensed" : "Input (DS2405 sensed)",
+                            "sensed.A" : "Input A (DS2406/7)",
+                            "sensed.B" : "Input B (DS2406/7)",
+                            "sensed.0" : "Input 0 (DS2408)",
+                            "sensed.1" : "Input 1 (DS2408)",
+                            "sensed.2" : "Input 2 (DS2408)",
+                            "sensed.3" : "Input 3 (DS2408)",
+                            "sensed.4" : "Input 4 (DS2408)",
+                            "sensed.5" : "Input 5 (DS2408)",
+                            "sensed.6" : "Input 6 (DS2408)",
+                            "sensed.7" : "Input 7 (DS2408)"
+                         }
+                    },
+                    {
+                        "key": "interval",
+                        "xpl": false,
+                        "description": "Interval in secondes between reading sensors (plugin must be restart).",
+                        "type": "integer",
+                        "default": "60"
+                    },
+                    {
+                        "key": "device",
+                        "xpl": false,
+                        "description": "The hexadecimal address",
+                        "type": "string"
+                    }
+                ]
+            },
+            "onewire.pio_input_openclose": {
+                "description": "PIO Input (DS2405..08)", 
+                "id": "onewire.input_openclose", 
+                "name": "PIO Input OpenClose (DS2405..08)",
+                "commands": [],
+                "sensors": ["onewire input openclose"],
+                "parameters": [
+                    {
+                        "key": "properties",
+                        "xpl": false,
+                        "description": "Sensor Attribute",
+                        "type": "choice",
+                        "choices" : {
+                            "sensed" : "Input (DS2405 sensed)",
+                            "sensed.A" : "Input A (DS2406/7)",
+                            "sensed.B" : "Input B (DS2406/7)",
+                            "sensed.0" : "Input 0 (DS2408)",
+                            "sensed.1" : "Input 1 (DS2408)",
+                            "sensed.2" : "Input 2 (DS2408)",
+                            "sensed.3" : "Input 3 (DS2408)",
+                            "sensed.4" : "Input 4 (DS2408)",
+                            "sensed.5" : "Input 5 (DS2408)",
+                            "sensed.6" : "Input 6 (DS2408)",
+                            "sensed.7" : "Input 7 (DS2408)"
+                         }
+                    },
+                    {
+                        "key": "interval",
+                        "xpl": false,
+                        "description": "Interval in secondes between reading sensors (plugin must be restart).",
+                        "type": "integer",
+                        "default": "60"
+                    },
+                    {
+                        "key": "device",
+                        "xpl": false,
+                        "description": "The hexadecimal address",
+                        "type": "string"
+                    }
+                ]
+            },
+            "onewire.pio_output_switch": {
+                "description": "PIO Output (DS2405..08)", 
+                "id": "onewire.output_switch", 
+                "name": "PIO Output Switch (DS2405..08)",
+                "commands": ["onewire output switch cmd"],
+                "sensors": ["onewire output switch"],
+                "parameters": [
+                    {
+                        "key": "properties",
+                        "xpl": false,
+                        "description": "Sensor Attribute",
+                        "type": "choice",
+                        "choices" : {
+                            "PIO" : "Output (DS2405)",
+                            "PIO.A" : "Output A (DS2406/7)",
+                            "PIO.B" : "Output B (DS2406/7)",
+                            "PIO.0" : "Output 0 (DS2408)",
+                            "PIO.1" : "Output 1 (DS2408)",
+                            "PIO.2" : "Output 2 (DS2408)",
+                            "PIO.3" : "Output 3 (DS2408)",
+                            "PIO.4" : "Output 4 (DS2408)",
+                            "PIO.5" : "Output 5 (DS2408)",
+                            "PIO.6" : "Output 6 (DS2408)",
+                            "PIO.7" : "Output 7 (DS2408)"
+                         }
+                    },
+                    {
+                        "key": "device",
+                        "xpl": false,
+                        "description": "The hexadecimal address",
+                        "type": "string"
+                    }
+                ]
+            } 
+        },
+        
+    "xpl_stats": {},
+    "xpl_commands": {},
+
+    "identity": {
+        "author": "domos", 
+        "author_email": "domos.vesta at gmail.com", 
+        "tags": ["protocole"], 
+        "dependencies": [
             {
                 "id": "owfs (>=2.9p8-6)",
                 "type": "other"
             }
         ],
-		"description": "Plugin for 1-wire bus",
-		"domogik_min_version": "0.5.0", 
-		"name": "onewired", 
-		"type": "plugin", 
-		"version": "0.1"
-	}
+        "description": "Plugin for 1-wire bus",
+        "domogik_min_version": "0.5.0", 
+        "name": "onewired", 
+        "type": "plugin", 
+        "version": "1.0"
+    }
 }
