@@ -7,7 +7,7 @@ Plugin onewired
 Purpose
 =======
 
-Another Domogik (**no xPL**) plugin for 1-wire bus.
+Another Domogik plugin for 1-wire bus.
 
 * This is a no xPL plugin, sensor value are update by **0mq messages**
 * The plugin read only the 1-wire sensor created devices
@@ -19,18 +19,119 @@ Another Domogik (**no xPL**) plugin for 1-wire bus.
 * The plugin can't use Input/Output sensor device like **DS2405/6/7/8/13**
 
 
-.. warning::	
-	The plugin and the documentation are still in development
 
+Dependencies
+============
+
+* A owfsserver on local or remote host
+
+On Debian jessie:: 
+
+	# apt-get install owfs owshell
+
+* Python module: ow
+
+
+On Debian jessie::
 	
-	
-Here are some screenshots to view usage
----------------------------------------
+	# pip install ow
 
 
+In plugin configuration, you can choose a direct access to the 1-wire bus ou use the owfs server **owserver**. 
+In this case, you can test the 1-wire with this shell command.
+
+Example with a remote owfs server::
+
+    $ owdir -s vesta
+    /28.7079D0040000
+    /28.2CAED7010000
+    /28.5C1FD0040000
+    /28.219ED7010000
+    /26.D050E7000000
+    /26.3442E7000000
+    /26.99E4F1000000
+    /81.E1BC2C000000
+    /05.3A9233000000
+    /1D.6C010F000000
+    /1D.61BF0D000000
+    /bus.0
+    /uncached
+    /settings
+    /system
+    /statistics
+    /structure
+    /simultaneous
+    /alarm
+
+    
+Example reading temperature sensor::
+
+    $ owget -s vesta /28.7079D0040000/temperature ; echo
+       9.875
+
+    
+Plugin configuration
+====================
+
+Here is the global configuration:
+---------------------------------
+
+===================== =========================== ======================================================================
+Key                   Type                        Description
+===================== =========================== ======================================================================
+1-wire_device         string                      1-Wire device (usb: 'u', lan: 'host:4304')
+--------------------- --------------------------- ----------------------------------------------------------------------
+1-wire_cache          integer                     If you use have a lot of 1wire devices you should use the cache
+===================== =========================== ======================================================================
+
+
+
+Create the devices
+==================
+
+Device's type available:
+    
 .. image:: Domogik_Plugin_Onewired_1.png
 
-.. image:: Domogik_Plugin_Onewired_2.png
+
+
+Parameters configuration for device type : **sensors**
+------------------------------------------------------
+
+
+===================== =========================== ======================================================================
+Key                   Type                        Description
+===================== =========================== ======================================================================
+device                string                      The hexadecimal 1-wire sensor address (example: 28.2CAED7010000) 
+--------------------- --------------------------- ----------------------------------------------------------------------
+interval              number                      The time in seconds between two sensor's reading
+--------------------- --------------------------- ----------------------------------------------------------------------
+properties            choice                      Select the 1-wire propertie in the list (example: temperature for a DS18B20 sensor)
+===================== =========================== ======================================================================
+
+
+
+
+Parameters configuration for device type : **Command**
+------------------------------------------------------
+
+This device is for output IO chips like DS2405, DS2406/7, DS2408.
+
+You need to configure this parameter :
+
+===================== =========================== ======================================================================
+Key                   Type                        Description
+===================== =========================== ======================================================================
+device                string                      The hexadecimal 1-wire sensor address (example: 28.2CAED7010000) 
+--------------------- --------------------------- ----------------------------------------------------------------------
+properties            choice                      Select the 1-wire propertie in the list (example: PIO for a DS2405 sensor)
+===================== =========================== ======================================================================
+
+
+
+Here are some screenshots of devices type creation
+--------------------------------------------------
+
 
 .. image:: Domogik_Plugin_Onewired_3.png
 
@@ -40,36 +141,11 @@ Here are some screenshots to view usage
 
 
 
-
-
-Dependencies
-============
-
-Plugin configuration
-====================
-
-Create the devices
-==================
-
-Device parameters configuration
--------------------------------
-
-X parameters are needed for a domogik device creation ...
-
-
-===================== =========================== ======================================================================
-Key                   Type                        Description
-===================== =========================== ======================================================================
-key1                  datatype                    ...
---------------------- --------------------------- ----------------------------------------------------------------------
-key2                  datatype                    ...
-===================== =========================== ======================================================================
-
-
 Start the plugin
 ================
 
 You can now start the plugin (start button) and use the created devices.
+
 
 Set up your widgets on the user interface
 =========================================
