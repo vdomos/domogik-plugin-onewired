@@ -16,7 +16,7 @@ Another Domogik plugin for 1-wire bus.
 * The plugin can read all properties of 1-wire chip like **"B1-R1-A/pressure"** for a **DS2438** chip.
 * The plugin only support a few datatype like Temperature, Humidity, Pressure 
 * But there is generic Voltage datatype for 1-wire CAN like **DS2438** or **DS2450**
-* The plugin can read Input sensor device like **DS2405/6/7/8/13** (Tested for DS2405/6)
+* The plugin can read/write Input/Output sensor device like **DS2405/6/7/8/13** (Tested for DS2405/6)
 
 
 Dependencies
