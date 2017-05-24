@@ -26,7 +26,7 @@ Dependencies
 
 On Debian jessie:: 
 
-	# apt-get install owfs owshell
+	# apt-get install owfs ow-shell
 
 * Python module: ow
 
