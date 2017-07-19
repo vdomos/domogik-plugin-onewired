@@ -123,6 +123,11 @@ class OnewireNetManager(Plugin):
                                           {})
         thread_sensors.start()
         self.register_thread(thread_sensors)
+
+        #self.log.info(u"==> Add devices detection test.")
+        #self.add_detected_device("onewire.thermometer_temp", "Mon device 1", "ref 1", "descrip 1", 64, "temperature", "28.5C1FD0040000")
+        #self.add_detected_device("onewire.counter_count", "Mon device 2", "ref 2", "descrip 2", 64, "counters.A", "1D.61BF0D000000")
+
         self.ready()
 
 
@@ -184,6 +189,24 @@ class OnewireNetManager(Plugin):
         reply_msg.add_data('reason', reason)
         self.reply(reply_msg.get())
 
+
+    # -------------------------------------------------------------------------------------------------
+    def add_detected_device(self, devicetype, name, ref, des, interval, properties, addr):
+        data = {}
+        data["device_type"] = devicetype
+        data["name"] = name
+        data["reference"] = ref
+        data["description"] = des
+        data["global"] = []
+        data["global"].append({"key": "interval", "value": interval})
+        data["global"].append({"key": "properties", "value": properties})
+        data["global"].append({"key": "device", "value": addr})
+        data["xpl"] = []
+        data["xpl_stats"] = []
+        data["xpl_commands"] = []
+            
+        self.device_detected(data)
+        
 
 if __name__ == "__main__":
     OnewireNetManager()
