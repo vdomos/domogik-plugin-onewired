@@ -5,20 +5,20 @@
     
     "configuration": [        
         {
-            "default": "u", 
+            "name": "1-Wire Device",
             "description": "1-Wire device (usb: 'u', lan: 'host:4304')", 
             "key": "1-wire_device", 
-            "name": "1-Wire Device",
             "required": "yes", 
-            "type": "string"
+            "type": "string",
+            "default": "u"
         }, 
         {
-            "default": "True", 
-            "description": "If you use have a lot of 1wire devices you should use the cache.", 
-            "key": "1-wire_cache", 
             "name": "Use OWFS cache",
+            "description": "If you use have a lot of 1wire devices you should use the cache", 
+            "key": "1-wire_cache", 
             "required": "no", 
-            "type": "boolean"
+            "type": "boolean",
+            "default": true
         }
     ], 
 
