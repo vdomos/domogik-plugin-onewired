@@ -23,8 +23,8 @@
     ], 
 
     "commands": { 
-        "onewire output switch cmd" : {
-            "name" : "Output Switch",
+        "switch" : {
+            "name" : "Switch",
             "return_confirmation" : true,
             "parameters" : [
                 {
@@ -37,7 +37,7 @@
     },
 
     "sensors": {
-            "onewire temperature": {
+            "temperature": {
                 "name": "Temperature",
                 "data_type": "DT_Temp",
                 "conversion": "",
@@ -51,7 +51,7 @@
                     "round_value": 0
                 }
             },
-            "onewire humidity": {
+            "humidity": {
                 "name": "Humidity",
                 "data_type": "DT_Humidity",
                 "conversion": "",
@@ -65,7 +65,7 @@
                     "round_value": 0
                 }
             },
-            "onewire luminosity": {
+            "luminosity": {
                 "name": "Luminosity",
                 "data_type": "DT_Brightness",
                 "conversion": "",
@@ -79,7 +79,7 @@
                     "round_value": 0
                 }
             },
-            "onewire pressure": {
+            "pressure": {
                 "name": "Pressure",
                 "data_type": "DT_Pressure",
                 "conversion": "",
@@ -93,7 +93,7 @@
                     "round_value": 0
                 }
             },
-            "onewire voltage": {
+            "voltage": {
                 "name": "Voltage",
                 "data_type": "DT_Volt",
                 "conversion": "",
@@ -107,7 +107,7 @@
                     "round_value": 0
                 }
             },
-            "onewire counter": {
+            "counter": {
                 "name": "Counter",
                 "data_type": "DT_Number",
                 "conversion": "",
@@ -121,7 +121,7 @@
                     "round_value": 0
                 }
             },
-            "onewire counter diff": {
+            "counter_diff": {
                 "name": "Counter diff",
                 "data_type": "DT_Number",
                 "conversion": "",
@@ -135,8 +135,8 @@
                     "round_value": 0
                 }
             },
-            "onewire input switch": {
-                "name": "Input Switch",
+            "switch": {
+                "name": "Switch",
                 "data_type": "DT_Switch",
                 "conversion": "",
                 "incremental": false,
@@ -149,8 +149,8 @@
                     "round_value": 0
                 }
             },
-            "onewire input openclose": {
-                "name": "Input OpenClose",
+            "opening": {
+                "name": "Opening",
                 "data_type": "DT_OpenClose",
                 "conversion": "",
                 "incremental": false,
@@ -158,20 +158,6 @@
                 "history": {
                     "store": true,
                     "duplicate": false,
-                    "max": 0,
-                    "expire": 0,
-                    "round_value": 0
-                }
-            },
-            "onewire output switch": {
-                "name": "Output Switch",
-                "data_type": "DT_Switch",
-                "conversion": "",
-                "incremental": false,
-                "timeout": 0,
-                "history": {
-                    "store": true,
-                    "duplicate": true,
                     "max": 0,
                     "expire": 0,
                     "round_value": 0
@@ -185,7 +171,7 @@
                 "id": "onewire.thermometer_temp", 
                 "name": "Thermometer (DS18B20, DS18S20)",
                 "commands": [],
-                "sensors": ["onewire temperature"],
+                "sensors": ["temperature"],
                 "parameters": [
                     {
                         "key": "interval",
@@ -220,7 +206,7 @@
                 "id": "onewire.batterymonitor_temp", 
                 "name": "Battery monitor temperature (DS2438)",
                 "commands": [],
-                "sensors": ["onewire temperature"],
+                "sensors": ["temperature"],
                 "parameters": [
                     {
                         "key": "interval",
@@ -251,7 +237,7 @@
                 "id": "onewire.batterymonitor_humidity", 
                 "name": "Battery monitor humidity (DS2438)",
                 "commands": [],
-                "sensors": ["onewire humidity"],
+                "sensors": ["humidity"],
                 "parameters": [
                     {
                         "key": "interval",
@@ -287,7 +273,7 @@
                 "id": "onewire.batterymonitor_pressure", 
                 "name": "Battery monitor pressure (DS2438)",
                 "commands": [],
-                "sensors": ["onewire pressure"],
+                "sensors": ["pressure"],
                 "parameters": [
                     {
                         "key": "interval",
@@ -320,7 +306,7 @@
                 "id": "onewire.batterymonitor_luminosity", 
                 "name": "Battery monitor luminosity (DS2438)",
                 "commands": [],
-                "sensors": ["onewire luminosity"],
+                "sensors": ["luminosity"],
                 "parameters": [
                     {
                         "key": "interval",
@@ -353,7 +339,7 @@
                 "id": "onewire.batterymonitor_voltage", 
                 "name": "Battery monitor voltage (DS2438)",
                 "commands": [],
-                "sensors": ["onewire voltage"],
+                "sensors": ["voltage"],
                 "parameters": [
                     {
                         "key": "interval",
@@ -385,7 +371,7 @@
                 "id": "onewire.counter_count", 
                 "name": "Counter (DS2423)",
                 "commands": [],
-                "sensors": ["onewire counter", "onewire counter diff"],
+                "sensors": ["counter", "counter_diff"],
                 "parameters": [
                     {
                         "key": "interval",
@@ -417,7 +403,7 @@
                 "id": "onewire.input_switch", 
                 "name": "PIO Input Switch (DS2405..08)",
                 "commands": [],
-                "sensors": ["onewire input switch"],
+                "sensors": ["switch"],
                 "parameters": [
                     {
                         "key": "properties",
@@ -453,12 +439,12 @@
                     }
                 ]
             },
-            "onewire.pio_input_openclose": {
+            "onewire.pio_input_opening": {
                 "description": "PIO Input (DS2405..08)", 
-                "id": "onewire.input_openclose", 
-                "name": "PIO Input OpenClose (DS2405..08)",
+                "id": "onewire.input_opening", 
+                "name": "PIO Input Opening (DS2405..08)",
                 "commands": [],
-                "sensors": ["onewire input openclose"],
+                "sensors": ["opening"],
                 "parameters": [
                     {
                         "key": "properties",
@@ -498,8 +484,8 @@
                 "description": "PIO Output (DS2405..08)", 
                 "id": "onewire.output_switch", 
                 "name": "PIO Output Switch (DS2405..08)",
-                "commands": ["onewire output switch cmd"],
-                "sensors": ["onewire output switch"],
+                "commands": ["switch"],
+                "sensors": ["switch"],
                 "parameters": [
                     {
                         "key": "properties",
@@ -547,6 +533,6 @@
         "domogik_min_version": "0.5.0", 
         "name": "onewired", 
         "type": "plugin", 
-        "version": "2.0"
+        "version": "3.0"
     }
 }
